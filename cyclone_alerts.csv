@@ -1,0 +1,2 @@
+alert_id,alert_type,center_lat,center_lon,radius_km,severity_level,wind_speed_at_center_kmh,issued_at,expires_at,source_agency
+IMD-BOB-2026-CY01,Cyclone Warning,16.5,82.2,150.0,Very Severe,115.0,2026-09-07T06:00:00Z,2026-09-08T06:00:00Z,IMD
