@@ -1,8 +1,16 @@
 from uuid import uuid4
+import sys
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
+
+try:
+    from orca_pipeline import run_orca_pipeline
+except ModuleNotFoundError:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from orca_pipeline import run_orca_pipeline
 
 try:
     from .db import engine
@@ -221,12 +229,13 @@ def create_catch_report(payload: CatchReport):
 
 
 @app.post("/query")
-def query_agent(payload: QueryRequest):
-    return {
-        "final_answer": "STUB: agent not yet wired in",
-        "agent_trail": ["planning", "retrieval", "reasoning", "risk"],
-        "query_received": payload.query,
-    }
+async def query_agent(payload: QueryRequest):
+    return await run_orca_pipeline(
+        query_text=payload.query,
+        lat=payload.lat,
+        lon=payload.lon,
+        date=payload.date,
+    )
 
 
 __all__ = ["app"]
